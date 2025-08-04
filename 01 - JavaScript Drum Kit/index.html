@@ -16,7 +16,7 @@
         <kbd>S</kbd>
         <span class="sound">hihat</span>
       </div>
-      <div data-key="68" class="key" v>
+      <div data-key="68" class="key">
         <kbd>D</kbd>
         <span class="sound">kick</span>
       </div>
@@ -63,23 +63,29 @@
       if (!audio) return;
       audio.play();
       key.classList.add("playing");
-      // setTimeout(() => {
-      //   key.classList.remove("playing");
-      // }, 400);
     }
-
-    window.addEventListener("keydown", playSound);
 
     function removeTransition(e) {
       if (e.propertyName !== "transform") return;
 
       this.classList.remove("playing");
     }
-
     const keys = document.querySelectorAll(".key");
-
     keys.forEach((key) =>
       key.addEventListener("transitionend", removeTransition)
     );
+
+    keys.forEach((key) => {
+      key.addEventListener("click", () => {
+        const keyCode = key.getAttribute("data-key");
+        const event = new KeyboardEvent("keydown", {
+          keyCode: keyCode,
+          which: keyCode,
+        });
+        window.dispatchEvent(event);
+      });
+    });
+
+    window.addEventListener("keydown", playSound);
   </script>
 </html>
